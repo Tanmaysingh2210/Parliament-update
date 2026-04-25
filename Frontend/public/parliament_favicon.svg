@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 340" width="340" height="340">
+  <!-- Outer dark circle -->
+  <circle cx="170" cy="170" r="168" fill="#0d0d1a" stroke="#c9a227" stroke-width="2"/>
+
+  <!-- 12 diamond points outer ring -->
+  <polygon points="170,6 174,14 170,22 166,14" fill="#e8b830"/>
+  <polygon points="253,24 255,33 247,37 245,28" fill="#e8b830"/>
+  <polygon points="316,87 318,96 310,98 308,89" fill="#e8b830"/>
+  <polygon points="334,170 334,179 326,179 326,170" fill="#e8b830"/>
+  <polygon points="316,253 318,244 310,242 308,251" fill="#e8b830"/>
+  <polygon points="253,316 255,307 247,303 245,312" fill="#e8b830"/>
+  <polygon points="170,334 174,326 170,318 166,326" fill="#e8b830"/>
+  <polygon points="87,316 85,307 93,303 95,312" fill="#e8b830"/>
+  <polygon points="24,253 22,244 30,242 32,251" fill="#e8b830"/>
+  <polygon points="6,170 6,179 14,179 14,170" fill="#e8b830"/>
+  <polygon points="24,87 22,96 30,98 32,89" fill="#e8b830"/>
+  <polygon points="87,24 85,33 93,37 95,28" fill="#e8b830"/>
+
+  <!-- Sunburst rays -->
+  <g opacity="0.18">
+    <line x1="170" y1="170" x2="170" y2="30" stroke="#e8b830" stroke-width="1.5"/>
+    <line x1="170" y1="170" x2="229" y2="46" stroke="#e8b830" stroke-width="1.5"/>
+    <line x1="170" y1="170" x2="294" y2="76" stroke="#e8b830" stroke-width="1.5"/>
+    <line x1="170" y1="170" x2="310" y2="111" stroke="#e8b830" stroke-width="1.5"/>
+    <line x1="170" y1="170" x2="310" y2="170" stroke="#e8b830" stroke-width="1.5"/>
+    <line x1="170" y1="170" x2="294" y2="229" stroke="#e8b830" stroke-width="1.5"/>
+    <line x1="170" y1="170" x2="264" y2="264" stroke="#e8b830" stroke-width="1.5"/>
+    <line x1="170" y1="170" x2="229" y2="294" stroke="#e8b830" stroke-width="1.5"/>
+    <line x1="170" y1="170" x2="170" y2="310" stroke="#e8b830" stroke-width="1.5"/>
+    <line x1="170" y1="170" x2="111" y2="294" stroke="#e8b830" stroke-width="1.5"/>
+    <line x1="170" y1="170" x2="76" y2="264" stroke="#e8b830" stroke-width="1.5"/>
+    <line x1="170" y1="170" x2="46" y2="229" stroke="#e8b830" stroke-width="1.5"/>
+    <line x1="170" y1="170" x2="30" y2="170" stroke="#e8b830" stroke-width="1.5"/>
+    <line x1="170" y1="170" x2="46" y2="111" stroke="#e8b830" stroke-width="1.5"/>
+    <line x1="170" y1="170" x2="76" y2="76" stroke="#e8b830" stroke-width="1.5"/>
+    <line x1="170" y1="170" x2="111" y2="46" stroke="#e8b830" stroke-width="1.5"/>
+  </g>
+
+  <!-- Laurel wreath ring -->
+  <circle cx="170" cy="170" r="138" fill="none" stroke="#1e3a1e" stroke-width="22"/>
+  <path d="M 60 130 Q 50 115 70 105 Q 65 120 80 118 Q 70 108 88 100 Q 82 115 96 115 Q 87 104 104 98 Q 99 114 112 116 Q 105 104 122 100" fill="none" stroke="#2d6a2d" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M 58 155 Q 42 148 48 130 Q 56 143 68 138 Q 53 132 62 115 Q 68 130 79 126 Q 65 120 77 103" fill="none" stroke="#2d6a2d" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M 280 130 Q 290 115 270 105 Q 275 120 260 118 Q 270 108 252 100 Q 258 115 244 115 Q 253 104 236 98 Q 241 114 228 116 Q 235 104 218 100" fill="none" stroke="#2d6a2d" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M 282 155 Q 298 148 292 130 Q 284 143 272 138 Q 287 132 278 115 Q 272 130 261 126 Q 275 120 263 103" fill="none" stroke="#2d6a2d" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M 130 278 Q 170 290 210 278" fill="none" stroke="#c9a227" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Ring borders -->
+  <circle cx="170" cy="170" r="138" fill="none" stroke="#c9a227" stroke-width="2.5"/>
+  <circle cx="170" cy="170" r="116" fill="none" stroke="#c9a227" stroke-width="1"/>
+
+  <!-- Shield -->
+  <path d="M170 88 L230 108 L230 175 Q230 218 170 242 Q110 218 110 175 L110 108 Z" fill="#0f1428" stroke="#c9a227" stroke-width="2.5"/>
+  <path d="M170 96 L224 114 L224 174 Q224 212 170 234 Q116 212 116 174 L116 114 Z" fill="none" stroke="#e8b830" stroke-width="1" opacity="0.4"/>
+
+  <!-- Crown -->
+  <rect x="148" y="104" width="44" height="8" rx="1" fill="#e8b830"/>
+  <polygon points="148,104 152,92 158,104" fill="#e8b830"/>
+  <polygon points="168,104 170,89 172,104" fill="#e8b830"/>
+  <polygon points="192,104 188,92 182,104" fill="#e8b830"/>
+  <circle cx="152" cy="93" r="2.5" fill="#cc3333"/>
+  <circle cx="170" cy="90" r="3" fill="#cc3333"/>
+  <circle cx="188" cy="93" r="2.5" fill="#cc3333"/>
+
+  <!-- Shield cross dividers -->
+  <line x1="170" y1="112" x2="170" y2="234" stroke="#c9a227" stroke-width="1.5" opacity="0.5"/>
+  <line x1="115" y1="168" x2="225" y2="168" stroke="#c9a227" stroke-width="1.5" opacity="0.5"/>
+
+  <!-- Crossed maces -->
+  <line x1="127" y1="128" x2="213" y2="222" stroke="#c9a227" stroke-width="5" stroke-linecap="round"/>
+  <line x1="213" y1="128" x2="127" y2="222" stroke="#c9a227" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="124" cy="125" r="9" fill="#e8b830" stroke="#08090f" stroke-width="1.5"/>
+  <circle cx="216" cy="125" r="9" fill="#e8b830" stroke="#08090f" stroke-width="1.5"/>
+  <circle cx="124" cy="225" r="9" fill="#e8b830" stroke="#08090f" stroke-width="1.5"/>
+  <circle cx="216" cy="225" r="9" fill="#e8b830" stroke="#08090f" stroke-width="1.5"/>
+  <circle cx="124" cy="125" r="4" fill="#08090f"/>
+  <circle cx="216" cy="125" r="4" fill="#08090f"/>
+  <circle cx="124" cy="225" r="4" fill="#08090f"/>
+  <circle cx="216" cy="225" r="4" fill="#08090f"/>
+
+  <!-- Mini parliament dome -->
+  <ellipse cx="170" cy="168" rx="14" ry="5" fill="#c9a227"/>
+  <path d="M156 168 Q156 153 170 150 Q184 153 184 168 Z" fill="#e8b830"/>
+  <rect x="152" y="168" width="36" height="18" rx="1" fill="#e8b830"/>
+  <rect x="164" y="176" width="12" height="10" rx="1" fill="#08090f"/>
+  <rect x="151" y="166" width="38" height="3" fill="#c9a227"/>
+  <rect x="168" y="143" width="4" height="8" rx="1" fill="#c9a227"/>
+  <polygon points="170,140 175,146 165,146" fill="#cc3333"/>
+
+  <!-- Bottom crimson banner -->
+  <path d="M120 248 Q170 260 220 248 L216 256 Q170 268 124 256 Z" fill="#cc3333" stroke="#8b0000" stroke-width="1"/>
+
+  <!-- Cardinal dots -->
+  <circle cx="170" cy="34" r="3" fill="#cc3333"/>
+  <circle cx="306" cy="170" r="3" fill="#cc3333"/>
+  <circle cx="170" cy="306" r="3" fill="#cc3333"/>
+  <circle cx="34" cy="170" r="3" fill="#cc3333"/>
+</svg>

@@ -1,0 +1,161 @@
+.card-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  color: white;
+}
+
+.card-modal {
+  width: 320px;
+  background: radial-gradient(circle at top, #0ff3, #000);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 0 40px cyan;
+  text-align: center;
+  animation: pop .3s ease;
+}
+
+.card-modal img {
+  width: 100%;
+  border-radius: 16px;
+  margin-bottom: 10px;
+}
+
+.card-modal h2 {
+  color: cyan;
+  margin: 10px 0;
+}
+
+.card-modal p {
+  color: #ddd;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(.6);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.card-image {
+  width: 450px;
+  animation: cardPop .3s ease;
+  filter: drop-shadow(0 0 35px cyan);
+  pointer-events: none
+}
+
+@keyframes cardPop {
+  from {
+    transform: scale(.5);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.card-modal-container{
+  display:flex;
+  
+  align-items:center;
+  gap:20px;
+  display: flex;
+  flex-direction: row;
+}
+
+.card-overlay button {
+  margin-top: 20px;
+  padding: 12px 28px;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 12px;
+  border: 2px solid cyan;
+  background: linear-gradient(135deg, #00ffff22, #000);
+  color: cyan;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all .25s ease;
+  box-shadow: 0 0 12px cyan, inset 0 0 6px #00ffff55;
+}
+
+/* hover effect */
+.card-overlay button:hover {
+  background: cyan;
+  color: black;
+  box-shadow: 0 0 25px cyan, 0 0 60px cyan;
+  transform: scale(1.05);
+}
+
+/* click effect */
+.card-overlay button:active {
+  transform: scale(.96);
+  box-shadow: 0 0 10px cyan inset;
+}
+
+.not-show{
+  display: none;
+}
+@media (max-width: 640px) {
+
+  .card-modal-container {
+    flex-direction: column !important;
+    width: 95%;
+    padding: 15px;
+    border-radius: 10px;
+    align-items: center;
+    gap: 8px; /* 🔥 reduce vertical space */
+  }
+
+  .card-image {
+    width: 90%;
+    max-height: 55vh;
+    object-fit: contain;
+  }
+
+  /* 🔥 FIX BUTTON */
+  .card-overlay button {
+    width: auto;          /* don't stretch */
+    padding: 8px 14px;    /* smaller */
+    font-size: 14px;      /* smaller text */
+    margin-top: 5px;      /* less push */
+  }
+
+  .close-btn {
+    font-size: 22px;
+    top: 6px;
+    right: 6px;
+  }
+}
+.card-modal-container {
+  position: relative;
+}
+
+/* Close button style */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: white;
+}
+
+/* Optional hover effect */
+.close-btn:hover {
+  color: red;
+}

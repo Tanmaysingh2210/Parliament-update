@@ -1,0 +1,122 @@
+/* 🌌 Page background */
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top, #0b1d2a, #02080f);
+  color: #e2e8f0;
+}
+
+/* 📦 Main container */
+.guide-container {
+  max-width: 900px;
+  margin: auto;
+  padding: 30px 20px;
+  line-height: 1.7;
+}
+
+/* 🏷 Title */
+.guide-container h1 {
+  text-align: center;
+  color: #00d4ff;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px #00d4ff;
+}
+
+/* 📌 Section headings */
+.guide-container h2 {
+  margin-top: 30px;
+  margin-bottom: 10px;
+  color: #38bdf8;
+  font-size: 1.4rem;
+}
+
+/* 📄 Paragraphs */
+.guide-container p {
+  font-size: 1rem;
+  color: #cbd5e1;
+}
+
+/* 📋 Lists */
+.guide-container ul {
+  padding-left: 20px;
+  margin-top: 10px;
+}
+
+.guide-container li {
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+/* 💡 Highlight strong text */
+.guide-container strong {
+  color: #00d4ff;
+}
+
+/* ✨ Section spacing */
+.guide-container h2 + p,
+.guide-container h2 + ul {
+  margin-top: 8px;
+}
+
+---
+
+/* 📱 MOBILE (phones) */
+@media (max-width: 600px) {
+  .guide-container {
+    padding: 20px 15px;
+  }
+
+  .guide-container h1 {
+    font-size: 1.8rem;
+  }
+
+  .guide-container h2 {
+    font-size: 1.2rem;
+  }
+
+  .guide-container p,
+  .guide-container li {
+    font-size: 0.9rem;
+  }
+}
+
+---
+
+/* 📲 TABLET */
+@media (min-width: 601px) and (max-width: 900px) {
+  .guide-container {
+    padding: 25px 20px;
+  }
+
+  .guide-container h1 {
+    font-size: 2.2rem;
+  }
+
+  .guide-container h2 {
+    font-size: 1.3rem;
+  }
+}
+
+---
+
+/* 💻 LARGE SCREENS */
+@media (min-width: 1200px) {
+  .guide-container {
+    max-width: 1000px;
+  }
+
+  .guide-container h1 {
+    font-size: 2.8rem;
+  }
+
+  .guide-container p,
+  .guide-container li {
+    font-size: 1.05rem;
+  }
+}
+
+.guide-container h2 {
+  border-left: 3px solid #00d4ff;
+  padding-left: 10px;
+}

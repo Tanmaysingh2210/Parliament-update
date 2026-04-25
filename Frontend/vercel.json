@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    { "source": "/api/:path*",
+     "destination": "https://parliamentbackend.onrender.com/:path*" 
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/"
+    }
+    
+  ]
+}
