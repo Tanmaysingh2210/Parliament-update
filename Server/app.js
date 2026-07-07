@@ -8,6 +8,7 @@ import gameRoute from "./route/gameRoute.js";
 import cardController from "./Controller/card.Contoller.js";
 import MongoStore from "connect-mongo";
 import cron from "node-cron";
+import matchmakingRoute from "./route/matchmakingRoute.js";
 
 connectDB();
 const app = express();
@@ -51,6 +52,8 @@ app.get("/ping", (req, res) => {
   res.send("Server is alive")
 })
 
+
+
 cron.schedule("*/5 * * * *", async () => {
   try {
     await fetch("https://parliamentbackend.onrender.com/ping");
@@ -68,5 +71,7 @@ app.use('/cards', cardController);
 
 app.use('/auth', authRoute);
 app.use('/friends', gameRoute);
+
+app.use("/matchmaking", matchmakingRoute);
 
 export { sessionMiddleWare, app };
