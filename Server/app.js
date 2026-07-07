@@ -62,7 +62,6 @@ cron.schedule("*/5 * * * *", async () => {
   }
 })
 
-
 app.use(sessionMiddleWare);
 app.use('/cards', cardController);
 
