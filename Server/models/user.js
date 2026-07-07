@@ -9,6 +9,15 @@ const userSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now() },
     lastActive: { type: Date, default: Date.now() },
     sessionToken: { type: String, unique: true, sparse: true },
+    totalPlayed: {
+        type: Number,
+        default: 0
+    },
+
+    totalWon: {
+        type: Number,
+        default: 0
+    },
 });
 
 

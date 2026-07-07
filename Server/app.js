@@ -9,6 +9,7 @@ import cardController from "./Controller/card.Contoller.js";
 import MongoStore from "connect-mongo";
 import cron from "node-cron";
 import matchmakingRoute from "./route/matchmakingRoute.js";
+import seasonRoute from "./route/seasonRoute.js";
 
 connectDB();
 const app = express();
@@ -72,5 +73,6 @@ app.use('/auth', authRoute);
 app.use('/friends', gameRoute);
 
 app.use("/matchmaking", matchmakingRoute);
+app.use("/season", seasonRoute);
 
 export { sessionMiddleWare, app };

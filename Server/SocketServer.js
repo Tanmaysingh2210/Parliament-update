@@ -5,7 +5,7 @@ import chatSocket from "./Socket/chatSocket.js";
 import gameSocket from "./Socket/gameSocket.js";
 import Game from "./models/GameSession.js";
 import Card from './models/cards.js';
-import { executeTurn, resolveBid } from './Socket/gameSocket.js';
+import { executeTurn, resolveBid, recordGameResult } from './Socket/gameSocket.js';
 
 const server = http.createServer(app);
 
@@ -126,6 +126,7 @@ setInterval(async () => {
                     game.isProcessing = false;
                     game.turnDeadline = null;
                     await game.save();
+                    await recordGameResult(game);
                     io.to(game.gameCode).emit("gameOver", { winner: game.winner, players: game.players });
                     continue;
                 }
