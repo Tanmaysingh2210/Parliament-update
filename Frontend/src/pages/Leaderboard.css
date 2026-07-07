@@ -1,0 +1,433 @@
+/* ============================================
+   PARLIAMENT BATTLEGROUND — LEADERBOARD
+   Dark cyberpunk style matching Dashboard
+   Mobile-first + Tablet + Desktop
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700;900&display=swap');
+
+/* ===== PAGE LAYOUT ===== */
+.leaderboard-page {
+  background: #010912;
+  min-height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+  position: relative;
+  font-family: 'Rajdhani', sans-serif;
+  color: white;
+  padding-bottom: 40px;
+}
+
+.leaderboard-page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at 20% 0%, rgba(0, 100, 180, 0.15) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 100%, rgba(100, 0, 180, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.leaderboard-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== BACK BUTTON ===== */
+.lb-back-btn {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 100;
+  background: rgba(0, 20, 60, 0.6);
+  border: 1px solid rgba(0, 200, 255, 0.3);
+  color: #7df9ff;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all 0.25s ease;
+  letter-spacing: 0.05em;
+}
+
+.lb-back-btn:hover {
+  background: rgba(0, 200, 255, 0.15);
+  box-shadow: 0 0 15px rgba(0, 200, 255, 0.4);
+  transform: translateX(-2px);
+}
+
+/* ===== HEADER ===== */
+.lb-header {
+  text-align: center;
+  padding: 3rem 1rem 1rem;
+}
+
+.lb-header h1 {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(1.3rem, 5vw, 2.2rem);
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  color: #7df9ff;
+  text-shadow: 0 0 25px rgba(0, 200, 255, 0.6),
+               0 0 50px rgba(0, 200, 255, 0.25);
+  margin: 0 0 4px;
+}
+
+.lb-header .lb-subtitle {
+  color: rgba(255, 204, 204, 0.8);
+  font-size: clamp(0.75rem, 2.5vw, 0.95rem);
+  font-style: italic;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+/* ===== SEASON INFO BAR ===== */
+.lb-season-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  margin: 16px auto;
+  max-width: 500px;
+  background: rgba(0, 80, 140, 0.2);
+  border: 1px solid rgba(0, 200, 255, 0.25);
+  border-radius: 14px;
+  backdrop-filter: blur(8px);
+  flex-wrap: wrap;
+}
+
+.lb-season-badge {
+  font-family: 'Orbitron', monospace;
+  font-weight: 700;
+  font-size: clamp(0.8rem, 3vw, 1rem);
+  color: #7df9ff;
+  text-shadow: 0 0 8px rgba(0, 200, 255, 0.5);
+  white-space: nowrap;
+}
+
+.lb-season-timer {
+  font-size: clamp(0.7rem, 2.5vw, 0.85rem);
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.03em;
+}
+
+.lb-season-timer span {
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+/* ===== TAB SWITCHER ===== */
+.lb-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 16px;
+  margin: 16px auto;
+  max-width: 400px;
+}
+
+.lb-tab {
+  flex: 1;
+  padding: 10px 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: clamp(12px, 3vw, 14px);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+.lb-tab:hover {
+  background: rgba(0, 200, 255, 0.08);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.lb-tab.active {
+  background: rgba(0, 140, 255, 0.2);
+  border-color: rgba(0, 200, 255, 0.5);
+  color: #7df9ff;
+  box-shadow: 0 0 12px rgba(0, 200, 255, 0.3);
+  text-shadow: 0 0 6px rgba(0, 200, 255, 0.5);
+}
+
+/* ===== MY STATS CARD ===== */
+.lb-my-stats {
+  margin: 20px auto;
+  max-width: 500px;
+  padding: 18px 20px;
+  background: rgba(0, 80, 140, 0.18);
+  border: 1px solid rgba(0, 200, 255, 0.3);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+}
+
+.lb-my-stats-title {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(0.65rem, 2.5vw, 0.8rem);
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin: 0 0 12px;
+}
+
+.lb-my-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.lb-stat-item {
+  text-align: center;
+  padding: 10px 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.lb-stat-value {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(1.2rem, 4vw, 1.6rem);
+  font-weight: 900;
+  color: #7df9ff;
+  text-shadow: 0 0 8px rgba(0, 200, 255, 0.4);
+  display: block;
+}
+
+.lb-stat-label {
+  font-size: clamp(0.6rem, 2vw, 0.75rem);
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 4px;
+  display: block;
+}
+
+/* ===== LEADERBOARD TABLE ===== */
+.lb-table-container {
+  margin: 20px auto;
+  max-width: 600px;
+  padding: 0 12px;
+}
+
+.lb-table-header {
+  display: grid;
+  grid-template-columns: 50px 1fr 70px 70px 80px;
+  padding: 10px 14px;
+  font-size: clamp(0.6rem, 2vw, 0.72rem);
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ===== LEADERBOARD ROW ===== */
+.lb-row {
+  display: grid;
+  grid-template-columns: 50px 1fr 70px 70px 80px;
+  align-items: center;
+  padding: 12px 14px;
+  margin: 4px 0;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.lb-row:hover {
+  background: rgba(0, 200, 255, 0.05);
+  border-color: rgba(0, 200, 255, 0.15);
+}
+
+/* Podium highlights */
+.lb-row.rank-1 {
+  background: rgba(255, 215, 0, 0.08);
+  border-color: rgba(255, 215, 0, 0.25);
+}
+.lb-row.rank-1:hover {
+  background: rgba(255, 215, 0, 0.12);
+}
+
+.lb-row.rank-2 {
+  background: rgba(192, 192, 192, 0.06);
+  border-color: rgba(192, 192, 192, 0.2);
+}
+
+.lb-row.rank-3 {
+  background: rgba(205, 127, 50, 0.06);
+  border-color: rgba(205, 127, 50, 0.2);
+}
+
+.lb-row.is-me {
+  border-color: rgba(0, 200, 255, 0.45) !important;
+  box-shadow: 0 0 14px rgba(0, 200, 255, 0.2);
+}
+
+/* Rank column */
+.lb-rank {
+  font-family: 'Orbitron', monospace;
+  font-weight: 900;
+  font-size: clamp(0.85rem, 3vw, 1.1rem);
+  text-align: center;
+}
+
+.lb-row.rank-1 .lb-rank { color: #ffd700; text-shadow: 0 0 8px rgba(255, 215, 0, 0.6); }
+.lb-row.rank-2 .lb-rank { color: #c0c0c0; text-shadow: 0 0 8px rgba(192, 192, 192, 0.5); }
+.lb-row.rank-3 .lb-rank { color: #cd7f32; text-shadow: 0 0 8px rgba(205, 127, 50, 0.5); }
+
+.lb-rank-medal {
+  font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+}
+
+/* Username column */
+.lb-username {
+  font-weight: 700;
+  font-size: clamp(0.85rem, 3vw, 1rem);
+  color: rgba(255, 255, 255, 0.9);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-right: 8px;
+}
+
+.lb-username .lb-guest-tag {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.25);
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+/* Stat columns */
+.lb-col-stat {
+  text-align: center;
+  font-weight: 600;
+  font-size: clamp(0.8rem, 2.5vw, 0.95rem);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.lb-col-winrate {
+  text-align: center;
+  font-weight: 700;
+  font-size: clamp(0.8rem, 2.5vw, 0.95rem);
+}
+
+.lb-winrate-high { color: #22c55e; }
+.lb-winrate-mid { color: #fbbf24; }
+.lb-winrate-low { color: rgba(255, 255, 255, 0.4); }
+
+/* ===== LOADING / EMPTY ===== */
+.lb-loading,
+.lb-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: clamp(0.85rem, 3vw, 1rem);
+  letter-spacing: 0.05em;
+}
+
+.lb-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(0, 200, 255, 0.15);
+  border-top: 3px solid #7df9ff;
+  border-radius: 50%;
+  animation: lb-spin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes lb-spin {
+  to { transform: rotate(360deg); }
+}
+
+.lb-empty-icon {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+  display: block;
+}
+
+/* ===== FADE-IN ANIMATION ===== */
+@keyframes lb-fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.lb-row {
+  animation: lb-fadeIn 0.35s ease both;
+}
+
+.lb-row:nth-child(1) { animation-delay: 0.05s; }
+.lb-row:nth-child(2) { animation-delay: 0.1s; }
+.lb-row:nth-child(3) { animation-delay: 0.15s; }
+.lb-row:nth-child(4) { animation-delay: 0.2s; }
+.lb-row:nth-child(5) { animation-delay: 0.22s; }
+.lb-row:nth-child(6) { animation-delay: 0.24s; }
+.lb-row:nth-child(7) { animation-delay: 0.26s; }
+.lb-row:nth-child(8) { animation-delay: 0.28s; }
+.lb-row:nth-child(9) { animation-delay: 0.3s; }
+.lb-row:nth-child(10) { animation-delay: 0.32s; }
+
+/* ===== RESPONSIVE: TABLET ===== */
+@media (min-width: 600px) {
+  .lb-header {
+    padding-top: 4rem;
+  }
+
+  .lb-my-stats {
+    max-width: 520px;
+    padding: 22px 28px;
+  }
+
+  .lb-table-container {
+    max-width: 640px;
+  }
+
+  .lb-tabs {
+    max-width: 440px;
+    gap: 10px;
+  }
+
+  .lb-tab {
+    padding: 12px 14px;
+  }
+}
+
+/* ===== RESPONSIVE: DESKTOP ===== */
+@media (min-width: 900px) {
+  .lb-header {
+    padding-top: 3rem;
+  }
+
+  .lb-header h1 {
+    font-size: 2.4rem;
+  }
+
+  .lb-my-stats {
+    max-width: 560px;
+  }
+
+  .lb-table-container {
+    max-width: 700px;
+  }
+
+  .lb-table-header,
+  .lb-row {
+    grid-template-columns: 60px 1fr 80px 80px 90px;
+    padding: 14px 20px;
+  }
+
+  .lb-back-btn {
+    top: 24px;
+    left: 24px;
+    padding: 10px 20px;
+    font-size: 15px;
+  }
+}

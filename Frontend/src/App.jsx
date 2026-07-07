@@ -12,6 +12,7 @@ import { useAuth } from './context/AuthContext';
 import HowToPlay from './pages/how-to-play';
 import Home from './pages/Home';
 import Maintenance from './pages/Maintenance';
+import Leaderboard from './pages/Leaderboard';
 
 function App() {
   const { user } = useAuth();
@@ -26,6 +27,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element={<DashBoard />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/lobby" element={<Lobby />} />
         <Route path="/game" element={<Board />} />
       </Routes>
