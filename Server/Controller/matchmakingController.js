@@ -30,6 +30,13 @@ export const joinQueue = async (req, res) => {
     }
 
 
+    // Clean up any stale entries for this user (e.g. from a previous session crash)
+    await MatchmakingQueue.deleteMany({
+      userId,
+      status: { $in: ["cancelled", "expired"] }
+    });
+
+
     // Check if already in queue
     const existingQueue = await MatchmakingQueue.findOne({
       userId,
@@ -43,8 +50,24 @@ export const joinQueue = async (req, res) => {
       });
     }
 
+    // Check if already matched but hasn't navigated yet
+    const existingMatch = await MatchmakingQueue.findOne({
+      userId,
+      status: "matched"
+    });
 
-    // Create queue entry
+    if (existingMatch) {
+      return res.status(200).json({
+        success: true,
+        message: "Already matched",
+        queueId: existingMatch._id,
+        status: existingMatch.status,
+        matchedGameId: existingMatch.matchedGameId
+      });
+    }
+
+
+    // Create queue entry with 5-minute timeout
     const queueEntry = await MatchmakingQueue.create({
       userId,
       preferredPlayerCount,
@@ -56,16 +79,41 @@ export const joinQueue = async (req, res) => {
     });
 
 
+    // Calculate position in queue
+    const playersAhead = await MatchmakingQueue.countDocuments({
+      status: "queued",
+      preferredPlayerCount,
+      joinedAt: { $lt: queueEntry.joinedAt }
+    });
+
+    const totalInQueue = await MatchmakingQueue.countDocuments({
+      status: "queued",
+      preferredPlayerCount
+    });
+
+
     return res.status(200).json({
       success: true,
       message: "Joined matchmaking queue",
       queueId: queueEntry._id,
-      status: queueEntry.status
+      status: queueEntry.status,
+      preferredPlayerCount,
+      positionInQueue: playersAhead + 1,
+      playersInQueue: totalInQueue,
+      playersNeeded: preferredPlayerCount
     });
 
   } catch (error) {
 
     console.error("Join Queue Error:", error);
+
+    // Handle duplicate key error (user already in queue — race condition)
+    if (error.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        message: "Already in queue"
+      });
+    }
 
     return res.status(500).json({
       success: false,
@@ -90,19 +138,17 @@ export const cancelQueue = async (req, res) => {
 
     const userId = req.session.user.id;
 
-    const { queueId } = req.body;
-
-
+    // Find and delete user's active queue entry (no need for queueId — userId is unique)
     const deletedQueue = await MatchmakingQueue.findOneAndDelete({
-      _id: queueId,
-      userId
+      userId,
+      status: "queued"
     });
 
 
     if (!deletedQueue) {
       return res.status(404).json({
         success: false,
-        message: "Queue entry not found"
+        message: "No active queue entry found"
       });
     }
 
@@ -130,15 +176,25 @@ export const cancelQueue = async (req, res) => {
 export const getQueueStatus = async (req, res) => {
   try {
 
-    const { queueId } = req.query;
+    if (!req.session.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized"
+      });
+    }
 
+    const userId = req.session.user.id;
 
-    const queueEntry = await MatchmakingQueue.findById(queueId);
+    // Find user's most recent queue entry (queued or matched)
+    const queueEntry = await MatchmakingQueue.findOne({
+      userId,
+      status: { $in: ["queued", "matched"] }
+    }).sort({ joinedAt: -1 });
 
     if (!queueEntry) {
       return res.status(404).json({
         success: false,
-        message: "Queue not found"
+        message: "No active queue entry"
       });
     }
 
@@ -148,6 +204,11 @@ export const getQueueStatus = async (req, res) => {
       status: "queued",
       preferredPlayerCount: queueEntry.preferredPlayerCount,
       joinedAt: { $lt: queueEntry.joinedAt }
+    });
+
+    const totalInQueue = await MatchmakingQueue.countDocuments({
+      status: "queued",
+      preferredPlayerCount: queueEntry.preferredPlayerCount
     });
 
 
@@ -165,7 +226,11 @@ export const getQueueStatus = async (req, res) => {
         queueEntry.matchedGameId,
 
       positionInQueue:
-        playersAhead + 1
+        playersAhead + 1,
+
+      playersInQueue: totalInQueue,
+
+      playersNeeded: queueEntry.preferredPlayerCount
     });
 
   } catch (error) {

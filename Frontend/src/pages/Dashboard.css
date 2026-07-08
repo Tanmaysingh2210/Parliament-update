@@ -935,3 +935,244 @@ body {
   text-align: center;
   letter-spacing: 0.05em;
 }
+
+/* ============================================
+   GLOBAL MATCHMAKING NEW STYLES
+   ============================================ */
+
+/* Matchmaking Button specific styles */
+.matchmaking-btn {
+  background: linear-gradient(135deg, rgba(0, 180, 255, 0.25), rgba(99, 102, 241, 0.25));
+  border: 1px solid rgba(0, 220, 255, 0.6);
+  box-shadow: 0 0 10px rgba(0, 200, 255, 0.2);
+}
+
+.matchmaking-btn:hover {
+  background: linear-gradient(135deg, rgba(0, 200, 255, 0.5), rgba(99, 102, 241, 0.5));
+  box-shadow: 0 0 15px rgba(0, 220, 255, 0.6);
+}
+
+/* Player selection buttons inside Matchmaking modal */
+.matchmaking-player-select {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.player-count-btn {
+  flex: 1;
+  padding: 12px 0;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #cbd5f5;
+  font-family: 'Orbitron', monospace;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.player-count-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(0, 200, 255, 0.4);
+}
+
+.player-count-btn.active {
+  background: linear-gradient(135deg, #00f0ff, #0072ff);
+  border-color: #00f0ff;
+  color: #010912;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+}
+
+/* Matchmaking Waiting Screen Overlay */
+.matchmaking-waiting {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(1, 9, 18, 0.95);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  z-index: 99999;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.matchmaking-waiting-content {
+  width: 90%;
+  max-width: 440px;
+  padding: 40px 30px;
+  background: rgba(10, 25, 47, 0.7);
+  border: 2px solid rgba(0, 240, 255, 0.3);
+  border-radius: 24px;
+  box-shadow: 0 0 40px rgba(0, 200, 255, 0.15), inset 0 0 20px rgba(0, 200, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: scaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.matchmaking-title {
+  margin: 20px 0 8px;
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(20px, 5vw, 24px);
+  color: #00f0ff;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+  letter-spacing: 1px;
+}
+
+.matchmaking-subtitle {
+  font-size: 15px;
+  color: #94a3b8;
+  margin-bottom: 30px;
+}
+
+.matchmaking-subtitle strong {
+  color: #fff;
+  font-family: 'Orbitron', monospace;
+}
+
+/* Pulse Animation Ring */
+.matchmaking-pulse-ring {
+  width: 90px;
+  height: 90px;
+  background: rgba(0, 240, 255, 0.05);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.matchmaking-pulse-ring::before,
+.matchmaking-pulse-ring::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid #00f0ff;
+  animation: pulseOuter 2s infinite cubic-bezier(0.215, 0.610, 0.355, 1);
+  opacity: 0;
+}
+
+.matchmaking-pulse-ring::after {
+  animation-delay: 1s;
+}
+
+.matchmaking-pulse-dot {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #00f0ff, #0072ff);
+  border-radius: 50%;
+  box-shadow: 0 0 20px #00f0ff;
+  animation: pulseInner 1.5s infinite ease-in-out;
+}
+
+@keyframes pulseInner {
+  0%, 100% {
+    transform: scale(0.85);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+@keyframes pulseOuter {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+/* Stats Block */
+.matchmaking-stats {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.matchmaking-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-family: 'Orbitron', monospace;
+  font-size: 16px;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* Error text inside wait screen */
+.matchmaking-error {
+  color: #f87171;
+  font-size: 14px;
+  margin-top: -10px;
+  margin-bottom: 20px;
+}
+
+/* Cancel Button */
+.matchmaking-cancel-btn {
+  width: 100%;
+  padding: 14px;
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.4);
+  border-radius: 12px;
+  color: #f87171;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.matchmaking-cancel-btn:hover {
+  background: rgba(248, 113, 113, 0.2);
+  border-color: #f87171;
+  box-shadow: 0 0 15px rgba(248, 113, 113, 0.2);
+}
+
+.matchmaking-cancel-btn:active {
+  transform: scale(0.98);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

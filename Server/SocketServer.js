@@ -6,6 +6,7 @@ import gameSocket from "./Socket/gameSocket.js";
 import Game from "./models/GameSession.js";
 import Card from './models/cards.js';
 import { executeTurn, resolveBid, recordGameResult } from './Socket/gameSocket.js';
+import { startMatchmakingEngine } from './utils/matchmakingEngine.js';
 
 const server = http.createServer(app);
 
@@ -50,6 +51,9 @@ io.on("connection", (socket) => {
     socket.userId = user.userId;
     socket.username = user.username;
 
+    // Join user room on connection to receive global alerts/matchmaking updates on Dashboard
+    socket.join(socket.userId.toString());
+
     console.log("User connected:", user.username);
 
     // socket.on("joinMatch", () => {
@@ -60,6 +64,9 @@ io.on("connection", (socket) => {
     chatSocket(io, socket);
     gameSocket(io, socket);
 });
+
+// ── Start matchmaking engine ────────────────────────────────
+startMatchmakingEngine(io);
 
 // ── WATCHDOG — runs every 5 seconds ──────────────────────────
 function getNextActiveIndex(game, currentIndex) {

@@ -2,6 +2,7 @@ import Game from "../models/GameSession.js";
 import Card from "../models/cards.js";
 import User from "../models/user.js";
 import SeasonStats from "../models/season.js";
+import MatchmakingQueue from "../models/MatchmakingQueue.js";
 import { getCurrentSeason } from "../utils/seasonHelper.js";
 
 /**
@@ -506,6 +507,9 @@ export default function gameSocket(io, socket) {
     });
 
     try {
+      // Remove from matchmaking queue if they were searching
+      await MatchmakingQueue.findOneAndDelete({ userId, status: "queued" });
+
       const game = await Game.findOne({
         status: "active",
         "players.userId": userId,
