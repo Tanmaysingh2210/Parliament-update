@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { getSocket, connectSocket } from "./socket";
 import { useAuth } from "../context/AuthContext";
 import "./lobby.css";
+import { FaWhatsapp } from "react-icons/fa";
 
 export default function Lobby() {
     const navigate = useNavigate();
@@ -14,7 +15,7 @@ export default function Lobby() {
     const [maxPlayers, setMaxPlayers] = useState(0);
     const [status, setStatus] = useState("waiting");
     const [connectionError, setConnectionError] = useState("");
-    const {user} = useAuth()
+    const { user } = useAuth()
     useEffect(() => {
         const socket = connectSocket(user);
         if (!socket) {
@@ -38,6 +39,8 @@ export default function Lobby() {
                 }
             });
         };
+
+
 
         // Add error listeners
         const handleError = (error) => {
@@ -111,6 +114,34 @@ export default function Lobby() {
             console.error("Copy failed:", err);
         }
     };
+    const shareLobby = async () => {
+        const inviteLink =
+            `${window.location.origin}/lobby?room=${roomCode}`;
+
+        if (navigator.share) {
+            await navigator.share({
+                title: "Join my Parliament Game",
+                text: "Join my game room!",
+                url: inviteLink
+            });
+        } else {
+            await navigator.clipboard.writeText(inviteLink);
+            alert("Invite link copied!");
+        }
+    };
+    const shareWhatsapp = () => {
+
+        const inviteLink =
+            `${window.location.origin}/lobby?room=${roomCode}`;
+
+        const text =
+            `Join my Parliament game!\n${inviteLink}`;
+
+        window.open(
+            `https://wa.me/?text=${encodeURIComponent(text)}`,
+            "_blank"
+        );
+    };
 
 
     return (
@@ -133,12 +164,23 @@ export default function Lobby() {
 
             <div className="room-box">
                 <p><strong>Room Code:</strong> {roomCode}</p>
-                <button
-                    onClick={copyCode}
-                    className={`copy-btn ${copied ? "copied" : ""}`}
-                >
-                    {copied ? "Copied ✓" : "Copy Invite Code"}
-                </button>
+
+                <div className="whatsapp">
+                    <button
+                        onClick={copyCode}
+                        className={`copy-btn ${copied ? "copied" : ""}`}
+                    >
+                        {copied ? "Copied ✓" : "Copy Invite Code"}
+                    </button>
+                    <button onClick={shareLobby}>
+                        Share Lobby
+                    </button>
+                    <button className="whatsapp-btn" onClick={shareWhatsapp}>
+                        <FaWhatsapp size={24} />
+                        Share on WhatsApp
+                    </button>
+                </div>
+
 
             </div>
 

@@ -1,67 +1,179 @@
-.lobby-container {
+
+ .lobby-container {
     min-height: 100vh;
-    background: linear-gradient(135deg, #0f0f1b, #1a1a2e);
+    background:
+        radial-gradient(circle at top left, #6c5ce7 0%, transparent 30%),
+        radial-gradient(circle at bottom right, #00ffc3 0%, transparent 30%),
+        linear-gradient(135deg, #050816, #0f172a, #111827);
     color: white;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 40px;
+    overflow: hidden;
 }
 
+.lobby-container h2 {
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+    text-shadow:
+        0 0 10px #00ffc3,
+        0 0 20px #00ffc3,
+        0 0 40px #00ffc3;
+}
+
+/* ROOM CARD */
 .room-box {
+    width: min(700px, 90%);
+    backdrop-filter: blur(18px);
     background: rgba(255,255,255,0.08);
-    padding: 20px;
-    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow:
+        0 0 20px rgba(0,255,200,0.2),
+        0 0 60px rgba(108,92,231,0.15);
+    border-radius: 24px;
+    padding: 25px;
+    text-align: center;
     margin-bottom: 30px;
-    text-align: center;
+    transition: all .3s ease;
 }
 
-.room-box button {
-    margin-top: 10px;
-    padding: 6px 14px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    background: #6c5ce7;
-    color: white;
+.room-box:hover {
+    transform: translateY(-5px);
+    box-shadow:
+        0 0 25px rgba(0,255,200,0.4),
+        0 0 70px rgba(108,92,231,0.25);
 }
 
-.player-list {
-    width: 300px;
-    background: rgba(255,255,255,0.08);
-    padding: 20px;
-    border-radius: 12px;
+.room-box p {
+    font-size: 1.3rem;
+    letter-spacing: 1px;
 }
 
-.player-item {
-    padding: 8px;
-    margin: 6px 0;
-    background: rgba(255,255,255,0.12);
-    border-radius: 6px;
-    text-align: center;
-}
-
-.waiting-text {
+/* BUTTON CONTAINER */
+.whatsapp {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
     margin-top: 20px;
-    opacity: 0.7;
 }
+
+/* COMMON BUTTON */
+.whatsapp button,
 .copy-btn {
-    padding: 8px 14px;
-    border-radius: 8px;
     border: none;
     cursor: pointer;
-    font-weight: 600;
-    transition: all .25s ease;
-    background: linear-gradient(180deg,#00ffcc,#008c7a);
-    box-shadow: 0 0 12px rgba(0,255,200,.5);
-    color: black;
+    border-radius: 14px;
+    padding: 12px 20px;
+    font-weight: 700;
+    transition: .25s;
+    position: relative;
+    overflow: hidden;
+}
+
+/* COPY BUTTON */
+.copy-btn {
+    background: linear-gradient(135deg,#00ffc3,#00b894);
+    color: #081018;
+    box-shadow: 0 0 20px rgba(0,255,195,.4);
 }
 
 .copy-btn:hover {
-    transform: scale(1.05);
+    transform: scale(1.08);
+    box-shadow: 0 0 30px rgba(0,255,195,.8);
 }
 
 .copy-btn.copied {
-    background: linear-gradient(180deg,#7dffb2,#00c853);
-    box-shadow: 0 0 18px rgba(0,255,100,.7);
+    background: linear-gradient(135deg,#7dffb2,#00e676);
+}
+
+/* SHARE BUTTON */
+.whatsapp button:nth-child(2) {
+    background: linear-gradient(135deg,#6c5ce7,#8e44ad);
+    color: white;
+    box-shadow: 0 0 20px rgba(108,92,231,.5);
+}
+
+.whatsapp button:nth-child(2):hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 30px rgba(108,92,231,.9);
+}
+
+/* WHATSAPP BUTTON */
+.whatsapp-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg,#25D366,#00ff84);
+    color: white;
+    box-shadow: 0 0 20px rgba(37,211,102,.5);
+}
+
+.whatsapp-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 35px rgba(37,211,102,.9);
+}
+
+/* PLAYER LIST */
+.player-list {
+    width: min(500px, 90%);
+    backdrop-filter: blur(20px);
+    background: rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 25px;
+    border: 1px solid rgba(255,255,255,.15);
+    box-shadow:
+        0 0 20px rgba(0,255,200,.15),
+        0 0 50px rgba(108,92,231,.15);
+}
+
+.player-list h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #00ffc3;
+    text-shadow: 0 0 12px #00ffc3;
+}
+
+.player-item {
+    padding: 14px;
+    margin: 10px 0;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.1);
+    text-align: center;
+    transition: .25s;
+    font-weight: 600;
+}
+
+.player-item:hover {
+    transform: translateX(6px);
+    background: rgba(0,255,195,0.15);
+    box-shadow: 0 0 15px rgba(0,255,195,.4);
+}
+
+/* WAITING TEXT */
+.waiting-text {
+    margin-top: 25px;
+    font-size: 1.1rem;
+    color: #00ffc3;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: .4;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    100% {
+        opacity: .4;
+        transform: scale(1);
+    }
 }
