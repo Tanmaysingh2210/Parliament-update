@@ -1,6 +1,58 @@
 import Game from "../models/GameSession.js";
 import Card from "../models/cards.js";
 import User from "../models/user.js";
+import SeasonStats from "../models/season.js";
+import MatchmakingQueue from "../models/MatchmakingQueue.js";
+import { getCurrentSeason } from "../utils/seasonHelper.js";
+
+/**
+ * Records game results for all players when a game ends.
+ * - Increments totalPlayed / totalWon on the User model (all-time)
+ * - Upserts SeasonStats for the current season (played / won / winRate)
+ * 
+ * @param {Object} game — The finished game document (must have .players and .winner)
+ */
+export async function recordGameResult(game) {
+  try {
+    const season = getCurrentSeason();
+    const winnerId = game.winner?.toString() || null;
+
+    for (const p of game.players) {
+      // Skip bots
+      if (p.isBot) continue;
+
+      const playerId = (p.userId?._id || p.userId)?.toString();
+      if (!playerId) continue;
+
+      const isWinner = playerId === winnerId;
+
+      // Update all-time totals on User
+      const userUpdate = { $inc: { totalPlayed: 1 } };
+      if (isWinner) userUpdate.$inc.totalWon = 1;
+      await User.findByIdAndUpdate(playerId, userUpdate);
+
+      // Upsert season stats
+      const seasonInc = { played: 1 };
+      if (isWinner) seasonInc.won = 1;
+
+      const updatedStats = await SeasonStats.findOneAndUpdate(
+        { userId: playerId, season },
+        { $inc: seasonInc },
+        { upsert: true, new: true }
+      );
+
+      // Recalculate winRate
+      updatedStats.winRate = updatedStats.played > 0
+        ? Math.round((updatedStats.won / updatedStats.played) * 10000) / 10000
+        : 0;
+      await updatedStats.save();
+    }
+
+    console.log(`[season] Recorded game result — season ${season}, winner: ${winnerId}`);
+  } catch (err) {
+    console.error("[season] recordGameResult error:", err);
+  }
+}
 
 
 function getMysteryCard() {
@@ -269,6 +321,7 @@ export async function executeTurn(gameCode, userId, username, io, socket = null)
       await game.save();
       await game.populate("players.userId");
       await game.populate("players.cards.cardId");
+      await recordGameResult(game);
       io.to(gameCode).emit("gameOver", { winner: game.winner, players: game.players });
       return;
     }
@@ -317,6 +370,7 @@ export async function executeTurn(gameCode, userId, username, io, socket = null)
       await game.save();
       await game.populate("players.userId");
       await game.populate("players.cards.cardId");
+      await recordGameResult(game);
       io.to(gameCode).emit("gameOver", { winner: game.winner, players: game.players });
       return;
     }
@@ -453,6 +507,9 @@ export default function gameSocket(io, socket) {
     });
 
     try {
+      // Remove from matchmaking queue if they were searching
+      await MatchmakingQueue.findOneAndDelete({ userId, status: "queued" });
+
       const game = await Game.findOne({
         status: "active",
         "players.userId": userId,
@@ -534,6 +591,7 @@ export default function gameSocket(io, socket) {
             await game.save();
             await game.populate("players.userId");
             await game.populate("players.cards.cardId");
+            await recordGameResult(game);
             io.to(gameCode).emit("gameOver", { winner: game.winner, players: game.players });
             return;
           }
@@ -819,6 +877,7 @@ export default function gameSocket(io, socket) {
         await game.save();
         await game.populate("players.userId");
         await game.populate("players.cards.cardId");
+        await recordGameResult(game);
 
         io.to(gameCode).emit("gameOver", {
           winner: game.winner,
@@ -897,6 +956,7 @@ export default function gameSocket(io, socket) {
         await game.save();
         await game.populate("players.userId");
         await game.populate("players.cards.cardId");
+        await recordGameResult(game);
         io.to(gameCode).emit("gameOver", { winner: game.winner, players: game.players });
         return;
       }
@@ -983,6 +1043,7 @@ export default function gameSocket(io, socket) {
         await game.save();
         await game.populate("players.userId");
         await game.populate("players.cards.cardId");
+        await recordGameResult(game);
         io.to(gameCode).emit("gameOver", { winner: game.winner, players: game.players });
         return;
       }

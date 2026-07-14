@@ -1,5 +1,6 @@
 import Game from "../models/GameSession.js";
 import Card from "../models/cards.js";
+import { recordGameResult } from "./gameSocket.js";
 
 function applyDamage(player, dmg) {
   dmg = Math.floor(dmg);
@@ -94,6 +95,7 @@ export async function processAutoTurn(gameCode, currentUserId, io) {
       game.turnDeadline = null;
       await game.save();
       io.to(gameCode).emit("gameOver", { winner: game.winner, players: game.players });
+      await recordGameResult(game);
       return;
     }
 
