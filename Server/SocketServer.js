@@ -7,6 +7,7 @@ import Game from "./models/GameSession.js";
 import Card from './models/cards.js';
 import { executeTurn, resolveBid, recordGameResult } from './Socket/gameSocket.js';
 import { startMatchmakingEngine } from './utils/matchmakingEngine.js';
+import { checkAndTriggerBotPlay, handleBotBidding } from './Bot/botLogic.js';
 
 const server = http.createServer(app);
 
@@ -85,6 +86,20 @@ function getNextActiveIndex(game, currentIndex) {
 setInterval(async () => {
     try {
         const now = new Date();
+
+        // Recovery: Check if it is a bot's turn and they are not processing
+        const botTurnGames = await Game.find({
+            status: "active",
+            isProcessing: false,
+            pendingAction: null,
+        });
+        for (const g of botTurnGames) {
+            const activePlayer = g.players.find(p => p.userId.toString() === g.currentTurn.toString());
+            if (activePlayer && activePlayer.isBot) {
+                checkAndTriggerBotPlay(g.gameCode, io);
+            }
+        }
+
         // ── Case 1: Player didn't roll dice in time ──────────────
         const staleTurnGames = await Game.find({
             status: "active",
@@ -212,6 +227,9 @@ setInterval(async () => {
                 type: "system",
                 time: new Date().toLocaleTimeString(),
             });
+
+            // Trigger bot bidding in auto-auctions
+            handleBotBidding(game.gameCode, card._id, io);
 
             const cardRef = card;
             const gameCodeRef = game.gameCode;

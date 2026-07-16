@@ -4,6 +4,7 @@ import User from "../models/user.js";
 import SeasonStats from "../models/season.js";
 import MatchmakingQueue from "../models/MatchmakingQueue.js";
 import { getCurrentSeason } from "../utils/seasonHelper.js";
+import { checkAndTriggerBotPlay, handleBotBidding } from "../Bot/botLogic.js";
 
 /**
  * Records game results for all players when a game ends.
@@ -352,7 +353,7 @@ export async function executeTurn(gameCode, userId, username, io, socket = null)
       await game.populate("players.userId");
       await game.populate("players.cards.cardId");
       io.to(gameCode).emit("boardUpdate", { players: game.players });
-      socket.emit("actionRequired", { type: actionPayload.type, card: actionPayload.card, playerCash: player.cashRemaining });
+      socket?.emit("actionRequired", { type: actionPayload.type, card: actionPayload.card, playerCash: player.cashRemaining });
       return;
     }
 
@@ -401,6 +402,8 @@ export async function executeTurn(gameCode, userId, username, io, socket = null)
       type: "system",
       time: new Date().toLocaleTimeString(),
     });
+
+    checkAndTriggerBotPlay(gameCode, io);
 
   } catch (err) {
     console.error("executeTurn error:", err);
@@ -478,6 +481,7 @@ export default function gameSocket(io, socket) {
           gameId: game._id,
           game,
         });
+        checkAndTriggerBotPlay(gameCode, io);
       }
 
     } catch (err) {
@@ -1067,6 +1071,8 @@ export default function gameSocket(io, socket) {
           turnNo: game.turnNo,
           mysteryCase: null,
         });
+
+        checkAndTriggerBotPlay(gameCode, io);
       } else {
         await game.save();
         await game.populate("players.userId");
@@ -1148,6 +1154,8 @@ export default function gameSocket(io, socket) {
           mysteryCase: null,
           cardLanded: { name: card.name, category: card.category },
         });
+
+        checkAndTriggerBotPlay(gameCode, io);
         return;
       }
 
@@ -1177,6 +1185,9 @@ export default function gameSocket(io, socket) {
           content: `Auction started for ${card.name}! ${BID_DURATION}s to bid.`,
           type: "system", time: new Date().toLocaleTimeString(),
         });
+
+        // Trigger bot bidding responses
+        handleBotBidding(gameCode, card._id, io);
 
         // Auto-resolve after deadline
         setTimeout(async () => {
@@ -1464,6 +1475,8 @@ export async function resolveBid(gameCode, card, ioInstance) {
       mysteryCase: null,
       cardLanded: { name: card.name, category: card.category },
     });
+
+    checkAndTriggerBotPlay(gameCode, io);
 
   } catch (err) {
     console.error("resolveBid error:", err);

@@ -1,5 +1,6 @@
 import MatchmakingQueue from "../models/MatchmakingQueue.js";
 import Game from "../models/GameSession.js";
+import { createBotUser, buildBotPlayerEntry } from "../Bot/botLogic.js";
 
 const pawnColors = ['redPawn', 'blackPawn', 'whitePawn', 'bluePawn', 'yellowPawn', 'greenPawn'];
 
@@ -51,11 +52,24 @@ async function runMatchingCycle(io) {
         .sort({ joinedAt: 1 })   // FIFO — oldest first
         .limit(playerCount);
 
-      // Not enough players yet — skip to next bucket
-      if (queuedPlayers.length < playerCount) continue;
+      if (queuedPlayers.length === 0) continue;
 
-      // Take exactly the number needed
-      const matchedPlayers = queuedPlayers.slice(0, playerCount);
+      let matchedPlayers = [];
+      let shouldForceStart = false;
+
+      if (queuedPlayers.length >= playerCount) {
+        matchedPlayers = queuedPlayers.slice(0, playerCount);
+      } else {
+        const oldestPlayer = queuedPlayers[0];
+        const waitTimeMs = Date.now() - new Date(oldestPlayer.joinedAt).getTime();
+        if (waitTimeMs >= 60000) {
+          shouldForceStart = true;
+          matchedPlayers = queuedPlayers;
+        }
+      }
+
+      if (matchedPlayers.length === 0) continue;
+
       const matchedUserIds = matchedPlayers.map(q => q.userId);
 
       // Generate unique game code (retry if collision)
@@ -71,6 +85,19 @@ async function runMatchingCycle(io) {
       // Build player entries with pawn colors
       const players = matchedUserIds.map((uid, index) => buildPlayerEntry(uid, index));
 
+      if (shouldForceStart) {
+        const botDifficulties = ["medium1", "medium2", "hard", "extreme"];
+        const neededBots = playerCount - players.length;
+
+        for (let i = 0; i < neededBots; i++) {
+          const randDifficulty = botDifficulties[Math.floor(Math.random() * botDifficulties.length)];
+          const botUser = await createBotUser();
+          const botPawn = pawnColors[players.length + i] || pawnColors[0];
+          const botPlayer = buildBotPlayerEntry(botUser, randDifficulty, botPawn);
+          players.push(botPlayer);
+        }
+      }
+
       // Create the GameSession in "waiting" status.
       // The existing Lobby + joinLobby socket handler will transition to "active"
       // once all players connect via socket.
@@ -82,7 +109,7 @@ async function runMatchingCycle(io) {
         status: "waiting"
       });
 
-      console.log(`[matchmaking] Created game ${gameCode} for ${playerCount} players`);
+      console.log(`[matchmaking] Created game ${gameCode} for ${playerCount} players (force started with bots: ${shouldForceStart})`);
 
       // Update all matched queue entries atomically
       await MatchmakingQueue.updateMany(
@@ -105,7 +132,7 @@ async function runMatchingCycle(io) {
         });
       }
 
-      console.log(`[matchmaking] Notified ${playerCount} players — game ${gameCode}`);
+      console.log(`[matchmaking] Notified ${matchedPlayers.length} players — game ${gameCode}`);
     }
 
     // Also emit queue:update to all still-queued players so their position refreshes
