@@ -21,6 +21,7 @@ const GameSchema = new mongoose.Schema({
             purchasedWallRose: { type: Boolean, default: false },
             purchasedWallMaria: { type: Boolean, default: false },
             isBot: { type: Boolean, required: true },
+            botDifficulty: { type: String, enum: ["medium1", "medium2", "hard", "extreme"], default: null }, // NEW
             remainingParliamentHp: { type: Number, required: true },
             remainingShieldHp: { type: Number },
             cashRemaining: { type: Number, required: true },
@@ -73,6 +74,7 @@ const GameSchema = new mongoose.Schema({
 
     turnDeadline: { type: Date, default: null },
     actionDeadline: { type: Date, default: null }, 
+    roomFillDeadline: { type: Date, default: null }, 
 
 }, { timestamps: true });
 

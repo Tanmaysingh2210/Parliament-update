@@ -62,7 +62,7 @@ async function runMatchingCycle(io) {
       } else {
         const oldestPlayer = queuedPlayers[0];
         const waitTimeMs = Date.now() - new Date(oldestPlayer.joinedAt).getTime();
-        if (waitTimeMs >= 60000) {
+        if (waitTimeMs >= 10000) {
           shouldForceStart = true;
           matchedPlayers = queuedPlayers;
         }
