@@ -475,13 +475,13 @@ const Board = () => {
       updateOptimisticPlayers(updated);
 
       const movingIndex = optimisticPlayersRef.current.findIndex(
-        p => p.userId._id.toString() === rolledBy.toString()
+        p => (p.userId?._id || p.userId)?.toString() === rolledBy?.toString()
       );
       if (movingIndex === -1) return;
 
       await animateMove(diceValue, movingIndex);
 
-      if (rolledBy.toString() === myUserIdRef.current?.toString()) {
+      if (rolledBy && myUserIdRef.current && rolledBy.toString() === myUserIdRef.current.toString()) {
         if (hasEmittedPlayTurn.current) return;
         hasEmittedPlayTurn.current = true;
         socket.current.emit("playTurn", { gameCode: roomId });
@@ -516,19 +516,10 @@ const Board = () => {
 
       const activeAgent = updated.find(p => p.agent === true);
 
-      // if (activeAgent) {
-      //   // ✅ force new value every time
-      //   setAgentActivatedPlayer(Date.now());
-
-      //   // remove after 2 sec
-      //   setTimeout(() => {
-      //     setAgentActivatedPlayer(null);
-      //   }, 2000);
-      // }
       const prevPlayers = optimisticPlayersRef.current;
 
       updated.forEach((p) => {
-        const prev = prevPlayers.find(x => x.userId._id === p.userId._id);
+        const prev = prevPlayers.find(x => (x.userId?._id || x.userId)?.toString() === (p.userId?._id || p.userId)?.toString());
 
         if (!prev) return;
 
@@ -1242,16 +1233,16 @@ const Board = () => {
                       const shield = player.remainingShieldHp;
                       const hpPct = (hp / maxHP) * 100;
                       const shPct = (shield / maxShield) * 100;
-                      const isThisTurn = currentTurn?.toString() === player.userId._id?.toString();
+                      const isThisTurn = currentTurn?.toString() === (player.userId?._id || player.userId)?.toString();
                       return (
                         <div key={i} className={`player-cell ${hp <= 300 ? "low" : ""} ${isThisTurn ? "active-turn" : ""}`}>
                           <div className={`image-parent ${hitEffect ? "parliament-hit" : ""}`}>
 
                             <div className="name">
-                              <span className={player.pawn}>{player.userId.username}</span>
+                              <span className={player.pawn}>{player.userId?.username || "Player"}</span>
                               {isThisTurn && <span className="text-xs text-green-400 ml-1">▶</span>}
                             </div>
-                            <img src={logo} className="parl" alt={player.userId.username} />
+                            <img src={logo} className="parl" alt={player.userId?.username || "Player"} />
                             <div className={`hp-bar ${hpPct <= 30 ? "low" : ""}`}>
                               <div className="hp-fill" style={{ width: `${hpPct}%` }} />
                               <span className="hp-text">{hp} / {maxHP}</span>

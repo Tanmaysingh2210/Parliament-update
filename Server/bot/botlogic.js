@@ -63,6 +63,17 @@ export async function checkAndTriggerBotPlay(gameCode, io) {
     const game = await Game.findOne({ gameCode, status: "active" });
     if (!game) return;
 
+    // Check if there is a pending action decision for a bot
+    if (game.pendingAction) {
+      const actionPlayerIndex = game.players.findIndex(
+        p => p.userId.toString() === game.pendingAction.playerId.toString()
+      );
+      if (actionPlayerIndex !== -1 && game.players[actionPlayerIndex].isBot && game.players[actionPlayerIndex].isActive) {
+        handleBotActionChoice(gameCode, io);
+        return;
+      }
+    }
+
     // Find the player whose turn it currently is
     const activePlayerIndex = game.players.findIndex(
       p => p.userId.toString() === game.currentTurn.toString()
@@ -365,7 +376,7 @@ export async function handleBotActionChoice(gameCode, io) {
           const populatedGame = await Game.findOne({ gameCode }).populate("players.userId").populate("players.cards.cardId");
           io.to(gameCode).emit("turnResult", {
             players: populatedGame.players,
-            currentTurn: populatedGame.currentTurn,
+            currentTurn: populatedGame.currentTurn._id || populatedGame.currentTurn,
             turnNo: populatedGame.turnNo,
             mysteryCase: null,
             cardLanded: { name: card.name, category: card.category },

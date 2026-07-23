@@ -1,4 +1,5 @@
 import MatchmakingQueue from "../models/MatchmakingQueue.js";
+import Game from "../models/GameSession.js";
 
 
 // JOIN QUEUE
@@ -30,12 +31,39 @@ export const joinQueue = async (req, res) => {
     }
 
 
-    // Clean up any stale entries for this user (e.g. from a previous session crash)
+    // Clean up any stale entries for this user
     await MatchmakingQueue.deleteMany({
       userId,
       status: { $in: ["cancelled", "expired"] }
     });
 
+
+    // Check if already matched to an active game
+    const existingMatch = await MatchmakingQueue.findOne({
+      userId,
+      status: "matched"
+    });
+
+    if (existingMatch) {
+      const activeGame = await Game.findOne({
+        _id: existingMatch.matchedGameId,
+        status: { $in: ["waiting", "active"] }
+      });
+
+      if (activeGame) {
+        return res.status(200).json({
+          success: true,
+          message: "Already matched",
+          queueId: existingMatch._id,
+          status: "matched",
+          matchedGameId: existingMatch.matchedGameId,
+          gameCode: activeGame.gameCode
+        });
+      } else {
+        // Game is finished or deleted — clean up stale matched entry
+        await MatchmakingQueue.deleteMany({ userId });
+      }
+    }
 
     // Check if already in queue
     const existingQueue = await MatchmakingQueue.findOne({
@@ -47,22 +75,6 @@ export const joinQueue = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: "Already in queue"
-      });
-    }
-
-    // Check if already matched but hasn't navigated yet
-    const existingMatch = await MatchmakingQueue.findOne({
-      userId,
-      status: "matched"
-    });
-
-    if (existingMatch) {
-      return res.status(200).json({
-        success: true,
-        message: "Already matched",
-        queueId: existingMatch._id,
-        status: existingMatch.status,
-        matchedGameId: existingMatch.matchedGameId
       });
     }
 
@@ -196,6 +208,20 @@ export const getQueueStatus = async (req, res) => {
         success: false,
         message: "No active queue entry"
       });
+    }
+
+    if (queueEntry.status === "matched") {
+      const activeGame = await Game.findOne({
+        _id: queueEntry.matchedGameId,
+        status: { $in: ["waiting", "active"] }
+      });
+      if (!activeGame) {
+        await MatchmakingQueue.deleteMany({ userId });
+        return res.status(404).json({
+          success: false,
+          message: "No active queue entry"
+        });
+      }
     }
 
 

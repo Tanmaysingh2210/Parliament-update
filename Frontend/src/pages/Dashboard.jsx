@@ -220,16 +220,15 @@ const DashBoard = () => {
                 return;
             }
 
-            // If already matched, navigate directly
-            if (res.data.status === "matched" && res.data.matchedGameId) {
-                cleanupSearch();
-                // Need to fetch the game code for the matched game
-                const statusRes = await api.get("/matchmaking/status");
-                if (statusRes.data.matchedGameId) {
-                    // The match:found event should handle navigation
-                    // but as fallback, we stay in searching state
+            // If already matched, navigate directly if active game code exists
+            if (res.data.status === "matched") {
+                const roomCode = res.data.gameCode;
+                if (roomCode) {
+                    cleanupSearch();
+                    setShowMatchmakingModal(false);
+                    setTimeout(() => navigate(`/lobby?room=${roomCode}`), 300);
+                    return;
                 }
-                return;
             }
 
             setQueueInfo({

@@ -49,6 +49,12 @@ export async function recordGameResult(game) {
       await updatedStats.save();
     }
 
+    // Clean up matchmaking queue entries for all human players in this game
+    const humanPlayerIds = game.players.filter(p => !p.isBot).map(p => (p.userId?._id || p.userId)?.toString()).filter(Boolean);
+    if (humanPlayerIds.length > 0) {
+      await MatchmakingQueue.deleteMany({ userId: { $in: humanPlayerIds } });
+    }
+
     console.log(`[season] Recorded game result — season ${season}, winner: ${winnerId}`);
   } catch (err) {
     console.error("[season] recordGameResult error:", err);
@@ -265,8 +271,8 @@ export async function executeTurn(gameCode, userId, username, io, socket = null)
         const owner = findCardOwner(game, card._id);
 
         if (!owner) {
-          // ← KEY: only show buy/bid modal if socket exists (player connected)
-          if (socket) {
+          // Show buy/bid action if player is connected OR is a bot
+          if (socket || player.isBot) {
             needsAction = true;
             if (player.cashRemaining < card.price) {
               actionPayload = { type: "Bid", card: { id: card._id, name: card.name, price: card.price, weaponDamage: card.weaponDamage } };
@@ -274,7 +280,7 @@ export async function executeTurn(gameCode, userId, username, io, socket = null)
               actionPayload = { type: "buyOrBid", card: { id: card._id, name: card.name, price: card.price, weaponDamage: card.weaponDamage } };
             }
           }
-          // If socket is null (disconnected/watchdog) → skip buy/bid, card stays unowned, turn advances
+          // If socket is null and not a bot (disconnected human) → skip buy/bid
         } else if (owner.userId.toString() !== userId.toString()) {
           if (newPosition !== 14) {
             const scientistBonus = 1 + (owner.scientist * 0.03);

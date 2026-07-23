@@ -91,11 +91,11 @@ setInterval(async () => {
         const botTurnGames = await Game.find({
             status: "active",
             isProcessing: false,
-            pendingAction: null,
         });
         for (const g of botTurnGames) {
             const activePlayer = g.players.find(p => p.userId.toString() === g.currentTurn.toString());
-            if (activePlayer && activePlayer.isBot) {
+            const actionPlayer = g.pendingAction ? g.players.find(p => p.userId.toString() === g.pendingAction.playerId.toString()) : null;
+            if ((activePlayer && activePlayer.isBot) || (actionPlayer && actionPlayer.isBot)) {
                 checkAndTriggerBotPlay(g.gameCode, io);
             }
         }
