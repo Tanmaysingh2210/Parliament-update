@@ -64,7 +64,7 @@ export async function checkAndTriggerBotPlay(gameCode, io) {
     if (!game) return;
 
     // Check if there is a pending action decision for a bot
-    if (game.pendingAction) {
+    if (game.pendingAction?.playerId) {
       const actionPlayerIndex = game.players.findIndex(
         p => p.userId.toString() === game.pendingAction.playerId.toString()
       );
@@ -292,7 +292,7 @@ export async function runBotEngineCycle(gameCode, botUserId, io) {
 export async function handleBotActionChoice(gameCode, io) {
   try {
     const game = await Game.findOne({ gameCode }).populate("players.userId").populate("players.cards.cardId");
-    if (!game || !game.pendingAction) return;
+    if (!game || !game.pendingAction?.playerId) return;
 
     // Check if the landing player is a bot
     const activeIndex = game.players.findIndex(p => p.userId._id.toString() === game.pendingAction.playerId.toString());

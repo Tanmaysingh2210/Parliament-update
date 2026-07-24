@@ -69,6 +69,12 @@ io.on("connection", (socket) => {
 // ── Start matchmaking engine ────────────────────────────────
 startMatchmakingEngine(io);
 
+function getUserId(player) {
+    return player.userId?._id
+        ? player.userId._id.toString()
+        : player.userId?.toString();
+}
+
 // ── WATCHDOG — runs every 5 seconds ──────────────────────────
 function getNextActiveIndex(game, currentIndex) {
     const total = game.players.length;
@@ -93,8 +99,12 @@ setInterval(async () => {
             isProcessing: false,
         });
         for (const g of botTurnGames) {
-            const activePlayer = g.players.find(p => p.userId.toString() === g.currentTurn.toString());
-            const actionPlayer = g.pendingAction ? g.players.find(p => p.userId.toString() === g.pendingAction.playerId.toString()) : null;
+            const activePlayer = g.players.find(p => p.userId.toString() === g.currentTurn?.toString());
+
+            console.log("the active player",activePlayer);
+            console.log("Pending Action:", g.pendingAction);
+
+            const actionPlayer = g.pendingAction?.playerId ? g.players.find(p => p.userId.toString() === g.pendingAction.playerId.toString()) : null;
             if ((activePlayer && activePlayer.isBot) || (actionPlayer && actionPlayer.isBot)) {
                 checkAndTriggerBotPlay(g.gameCode, io);
             }
@@ -168,7 +178,7 @@ setInterval(async () => {
                     mysteryCase: null,
                 });
 
-                io.to(gameCode).emit("diceResult", {
+                io.to(game.gameCode).emit("diceResult", {
                     diceValue: 1,          
                     rolledBy: null,        
                     players: game.players,
