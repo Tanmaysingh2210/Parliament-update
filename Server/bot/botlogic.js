@@ -336,10 +336,22 @@ export async function handleBotActionChoice(gameCode, io) {
 
         if (decision === "buy") {
           // BUY direct
-          botPlayer.cashRemaining -= minPrice;
-          botPlayer.cards.push({ cardId: card._id });
+          const freshBot = checkGameObj.players.find(
+            p => p.userId.toString() === game.pendingAction.playerId.toString()
+          );
 
-          const nextIndex = getNextActiveIndex(checkGameObj, activeIndex);
+          if (!freshBot) return;
+
+          freshBot.cashRemaining -= minPrice;
+          freshBot.cards.push({ cardId: card._id });
+
+          console.log("Bot cards before save:", freshBot.cards);
+          
+          const freshIndex = checkGameObj.players.findIndex(
+            p => p.userId.toString() === freshBot.userId.toString()
+          );
+
+          const nextIndex = getNextActiveIndex(checkGameObj, freshIndex);
           checkGameObj.turnNo += 1;
 
           // Register time bomb if card is time bomb
@@ -348,7 +360,7 @@ export async function handleBotActionChoice(gameCode, io) {
             if (!checkGameObj.timebombs) checkGameObj.timebombs = [];
             checkGameObj.timebombs.push({
               cardId: card._id,
-              ownerId: botPlayer.userId._id,
+              ownerId: freshBot.userId,
               position: card.position,
               purchasedAtTurn: checkGameObj.turnNo,
               explodeAtTurn: checkGameObj.turnNo + activeCount,
