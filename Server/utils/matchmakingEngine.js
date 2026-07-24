@@ -82,8 +82,16 @@ async function runMatchingCycle(io) {
         retries++;
       }
 
-      // Build player entries with pawn colors
-      const players = matchedUserIds.map((uid, index) => buildPlayerEntry(uid, index));
+      // Build player entries with pawn colors. Assign pawns deterministically
+      // across humans and bots to avoid duplicate pawn assignments.
+      const players = [];
+      let nextPawnIndex = 0;
+
+      // Add human players first, consuming pawn slots
+      for (let idx = 0; idx < matchedUserIds.length; idx++) {
+        players.push(buildPlayerEntry(matchedUserIds[idx], nextPawnIndex));
+        nextPawnIndex++;
+      }
 
       if (shouldForceStart) {
         const botDifficulties = ["medium1", "medium2", "hard", "extreme"];
@@ -92,9 +100,11 @@ async function runMatchingCycle(io) {
         for (let i = 0; i < neededBots; i++) {
           const randDifficulty = botDifficulties[Math.floor(Math.random() * botDifficulties.length)];
           const botUser = await createBotUser();
-          const botPawn = pawnColors[players.length + i] || pawnColors[0];
+          // If we ever exceed the pawnColors length, wrap around to avoid undefined
+          const botPawn = pawnColors[nextPawnIndex % pawnColors.length];
           const botPlayer = buildBotPlayerEntry(botUser, randDifficulty, botPawn);
           players.push(botPlayer);
+          nextPawnIndex++;
         }
       }
 
