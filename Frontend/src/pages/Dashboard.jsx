@@ -317,14 +317,14 @@ const DashBoard = () => {
                         <div className="modal-box friend-modal" onClick={(e) => e.stopPropagation()}>
                             <h3>Play With Friends</h3>
                             <div className="friend-modal-buttons">
-                                <button className="modal-btn create" onClick={() => { setShowFriendOption(false); setShowCreateModal(true); }}>
+                                <button className="modal-btn create" onClick={() => { setShowFriendOption(false); setShowCreateModal(true);playClick() }}>
                                     🎯 Create Room
                                 </button>
-                                <button className="modal-btn join" onClick={() => { setShowFriendOption(false); setShowJoinModal(true); }}>
+                                <button className="modal-btn join" onClick={() => { setShowFriendOption(false); setShowJoinModal(true); playClick()}}>
                                     🔗 Join Room
                                 </button>
                             </div>
-                            <button className="close-btn" onClick={() => setShowFriendOption(false)}>X</button>
+                            <button className="close-btn" onClick={() => {setShowFriendOption(false);playClick()}}>X</button>
                         </div>
                     </div>
                 )}
@@ -339,11 +339,13 @@ const DashBoard = () => {
                                 {[2, 3, 4, 5, 6].map(num => <option key={num} value={num}>{num}</option>)}
                             </select>
                             <div className="modal-actions">
-                                <button onClick={() => setShowCreateModal(false)}>Cancel</button>
+                                <button onClick={() =>{
+                                    setShowCreateModal(false);playClick()}}>Cancel</button>
                                 <button disabled={creating} onClick={async () => {
                                     setCreating(true);
                                     await new Promise(res => setTimeout(res, 50));
                                     await handleCreateRoom();
+                                    playClick()
                                 }}>
                                     {creating ? 'Creating...' : 'Create'}
                                 </button>
@@ -369,7 +371,8 @@ const DashBoard = () => {
                             />
                             {joinError && <p className="error-text">{joinError}</p>}
                             <div className="modal-actions">
-                                <button onClick={() => setShowJoinModal(false)}>Cancel</button>
+                                <button onClick={() =>{
+                                    setShowJoinModal(false);playClick()}}>Cancel</button>
                                 <button onClick={handleJoinRoom} disabled={joining}>
                                     {joining ? "Joining..." : "Join"}
                                 </button>
@@ -408,7 +411,7 @@ const DashBoard = () => {
                 {/* ── Matchmaking: Player count selector modal (NEW) ── */}
                 {showMatchmakingModal && !isSearching && (
                     <div className="modal-overlay" onClick={() => setShowMatchmakingModal(false)}>
-                        <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-box" onClick={(e) => {e.stopPropagation();playClick()}}>
                             <h3>🌐 Find Global Match</h3>
                             <label>Number of Players</label>
                             <div className="matchmaking-player-select">
@@ -424,7 +427,7 @@ const DashBoard = () => {
                             </div>
                             {searchError && <p className="error-text">{searchError}</p>}
                             <div className="modal-actions">
-                                <button onClick={() => { setShowMatchmakingModal(false); setSearchError(""); }}>Cancel</button>
+                                <button onClick={() => { setShowMatchmakingModal(false); setSearchError("");playClick() }}>Cancel</button>
                                 <button onClick={handleFindMatch}>
                                     Find Match
                                 </button>
@@ -474,7 +477,7 @@ const DashBoard = () => {
                 )}
 
                 <div className="bottom-bar">
-                    <button className="nav-btn" onClick={() => navigate('/leaderboard')}>🏆<span>Leaderboard</span></button>
+                    <button className="nav-btn" onClick={() => {navigate('/leaderboard');playClick()}}>🏆<span>Leaderboard</span></button>
                     <button className="nav-btn">⚙️<span>Settings</span></button>
                     <button className="nav-btn">📩<span>Inbox</span></button>
                     <button className="nav-btn">👥<span>Friends</span></button>
