@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext.jsx';
 import api from '../api/api.js';
 import { connectSocket, getSocket } from "../Component/socket.js";
 import ParliamentBackground from "../Component/ParliamentBackground.jsx";
+import {playClick} from "../utils/reusable.js";
 
 const DashBoard = () => {
     const { user, signout, setUsername } = useAuth();
@@ -306,8 +307,8 @@ const DashBoard = () => {
 
                 <div className="glass-panel">
                     <h2 className="panel-title">GAME MODE</h2>
-                    <button className="glass-btn sharp-btn" onClick={() => setShowFriendOption(true)}>👥 Play with Friends</button>
-                    <button className="glass-btn sharp-btn matchmaking-btn" onClick={() => setShowMatchmakingModal(true)}>🌐 Find Global Match</button>
+                    <button className="glass-btn sharp-btn" onClick={() => {setShowFriendOption(true); playClick()}}>👥 Play with Friends</button>
+                    <button className="glass-btn sharp-btn matchmaking-btn" onClick={() => {setShowMatchmakingModal(true);playClick()}}>🌐 Find Global Match</button>
                 </div>
 
                 {/* ── Friend option modal (existing) ── */}
