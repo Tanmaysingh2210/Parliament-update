@@ -100,11 +100,9 @@ setInterval(async () => {
         });
         for (const g of botTurnGames) {
             const activePlayer = g.players.find(p => p.userId.toString() === g.currentTurn?.toString());
-
-            console.log("the active player",activePlayer);
-            console.log("Pending Action:", g.pendingAction);
-
+        
             const actionPlayer = g.pendingAction?.playerId ? g.players.find(p => p.userId.toString() === g.pendingAction.playerId.toString()) : null;
+
             if ((activePlayer && activePlayer.isBot) || (actionPlayer && actionPlayer.isBot)) {
                 checkAndTriggerBotPlay(g.gameCode, io);
             }

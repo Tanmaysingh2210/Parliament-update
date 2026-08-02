@@ -15,7 +15,7 @@ export const HUMAN_NAMES = [
 export function getRandomHumanName() {
   const randomIndex = Math.floor(Math.random() * HUMAN_NAMES.length);
   const randomSuffix = Math.floor(Math.random() * 900) + 100; // e.g. 482
-  return `${HUMAN_NAMES[randomIndex]}_Bot${randomSuffix}`;
+  return `${HUMAN_NAMES[randomIndex]}${randomSuffix}`;
 }
 
 /**

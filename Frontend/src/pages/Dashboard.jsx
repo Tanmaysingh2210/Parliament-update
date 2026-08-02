@@ -478,9 +478,9 @@ const DashBoard = () => {
 
                 <div className="bottom-bar">
                     <button className="nav-btn" onClick={() => {navigate('/leaderboard');playClick()}}>🏆<span>Leaderboard</span></button>
-                    <button className="nav-btn">⚙️<span>Settings</span></button>
+                    {/* <button className="nav-btn">⚙️<span>Settings</span></button>
                     <button className="nav-btn">📩<span>Inbox</span></button>
-                    <button className="nav-btn">👥<span>Friends</span></button>
+                    <button className="nav-btn">👥<span>Friends</span></button> */}
                 </div>
             </div>
         </>
